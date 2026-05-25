@@ -1,0 +1,31 @@
+name: Gece_Telefon_Guncelleme
+on:
+  schedule:
+    - cron: '0 21 * * *' # Her gece TR saatiyle 00:00'da çalışır
+  workflow_dispatch: # İstediğinde elle çalıştırman için buton açar
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Python Kur
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Kütüphaneleri Yukle
+        run: |
+          pip install requests beautifulsoup4 pandas
+          
+      - name: Botu Calistir
+        run: python bot.py
+        
+      - name: Verileri Kaydet
+        run: |
+          git config --global user.name 'Telefon-Botu'
+          git config --global user.email 'bot@github.com'
+          git add telefonlar.csv
+          git commit -m "Yeni cihazlar eklendi" || exit 0
+          git
